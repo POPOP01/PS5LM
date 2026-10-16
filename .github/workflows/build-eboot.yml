@@ -75,6 +75,10 @@ jobs:
         run: |
           cd PS5LM/.deps/src/PS5_Vulkan
           chmod +x tools/*.sh tools/*.py Makefile
+          # align with the Mesa the v0.8.3 title was actually built from:
+          # 1ba9874 (Oct 12) landed the same day as the release and its entry
+          # points go weak, which the title converter refuses
+          export PS5_MESA_REVISION=47e9eb61ee7e1112194557e1e047178562827bc6
           tools/setup-native-dependencies.sh
           tools/build-radv.sh release
           # upstream main's hello-world link regressed (ps5_fp_ieee has no
