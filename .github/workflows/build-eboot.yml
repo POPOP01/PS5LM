@@ -88,6 +88,7 @@ jobs:
       - name: Build app
         run: |
           cd PS5LM
+          mkdir -p build
           chmod +x scripts/*.sh ps5/app/ps5cc ps5/app/ps5cxx
           scripts/setup-sdk.sh
           scripts/build-mbedtls.sh
