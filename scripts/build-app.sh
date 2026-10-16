@@ -91,11 +91,12 @@ cxx -std=c++20 -fexceptions -fcxx-exceptions -c "$root/ps5/app/fetch.cpp" -o "$o
 cxx -std=c++20 -fexceptions -fcxx-exceptions -I "$llama/vendor" -c "$root/ps5/app/market.cpp" -o "$obj/market.o"
 "$root/ps5/app/ps5cc" -O2 -I "$llama/vendor/hash" -c "$llama/vendor/hash/sha256/sha256.c" -o "$obj/sha256.o"
 "$root/ps5/app/ps5cc" -O2 -c "$root/ps5/app/compat_app.c" -o "$obj/compat_app.o"
+"$root/ps5/app/ps5cc" -O2 -c "$root/ps5/compat/float_strtod.c" -o "$obj/float_strtod.o"
 # In an archive, so --exclude-libs keeps them local: a stub module defines some
 # of the same names, and lld would otherwise export ours to interpose them,
 # which the title converter refuses.
 rm -f "$obj/libps5app_compat.a"
-"$sdk/bin/llvm-ar" rcs "$obj/libps5app_compat.a" "$obj/compat_app.o"
+"$sdk/bin/llvm-ar" rcs "$obj/libps5app_compat.a" "$obj/compat_app.o" "$obj/float_strtod.o"
 cxx -std=c++20 -fno-exceptions -fno-rtti -c "$vk/tooling/native/app_crt.cpp" -o "$obj/app_crt.o"
 cxx -std=c++20 -fexceptions -fcxx-exceptions -c "$root/ps5/app/cpp_runtime.cpp" -o "$obj/app_cpp_runtime.o"
 

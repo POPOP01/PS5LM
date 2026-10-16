@@ -55,8 +55,11 @@ compat_dir="$out/ps5compat"
 mkdir -p "$compat_dir"
 "$PS5_PAYLOAD_SDK/bin/prospero-clang" -O2 -Wall -Wextra -Werror -c \
     "$root/ps5/compat/compat.c" -o "$compat_dir/compat.o"
+"$PS5_PAYLOAD_SDK/bin/prospero-clang" -O2 -Wall -Wextra -Werror -c \
+    "$root/ps5/compat/float_strtod.c" -o "$compat_dir/float_strtod.o"
 rm -f "$compat_dir/libps5compat.a"
-"$PS5_PAYLOAD_SDK/bin/prospero-ar" rcs "$compat_dir/libps5compat.a" "$compat_dir/compat.o"
+"$PS5_PAYLOAD_SDK/bin/prospero-ar" rcs "$compat_dir/libps5compat.a" \
+    "$compat_dir/compat.o" "$compat_dir/float_strtod.o"
 std_libs="$compat_dir/libps5compat.a $mbedtls/lib/libmbedtls.a $mbedtls/lib/libmbedx509.a"
 std_libs="$std_libs $mbedtls/lib/libmbedcrypto.a $mbedtls/lib/libeverest.a $mbedtls/lib/libp256m.a"
 
