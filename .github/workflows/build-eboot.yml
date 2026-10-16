@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            clang-18 lld-18 llvm-18 llvm-18-dev libclang-18-dev libclc-18-dev \
+            clang-18 lld-18 llvm-18 llvm-18-dev libclang-18-dev libclc-18-dev libllvmspirvlib-18-dev \
             cmake ninja-build meson socat unzip wget rsync pkg-config flex bison \
             python3-mako python3-ply libvulkan-dev spirv-headers \
             zlib1g-dev patchelf
