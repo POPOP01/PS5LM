@@ -73,6 +73,11 @@ jobs:
           git clone https://github.com/mihawk-99/PS5_Vulkan .deps/src/PS5_Vulkan
           git clone https://github.com/mihawk-99/PS5_Mesa .deps/src/PS5_Mesa
           git clone https://github.com/mihawk-99/PS5_PayloadSDK .deps/src/PS5_PayloadSDK
+          # rebuild the exact v0.8.3 input combination: the console rejects
+          # the f410e67 head with a no-log instant crash, and that one commit
+          # also carries the known make-app ps5_fp_ieee link regression
+          git -C .deps/src/PS5_Vulkan checkout --detach 252bf912a745e3566a93b69b098bdc8ec4048837
+          git -C .deps/src/PS5_PayloadSDK checkout --detach b5efad528e0ac1b8289f39d72a0e890ff68ff0a6
           wget -q https://github.com/blackbearreloaded/ps5-opengl/releases/download/v1.0.0/ps5-opengl-sdk-1.0.0.tar.gz
           tar xf ps5-opengl-sdk-1.0.0.tar.gz -C .deps/ps5-opengl/
           test -f .deps/ps5-opengl/ps5-opengl-sdk-1.0.0/sdk/lib/libPS5OpenGL.a
