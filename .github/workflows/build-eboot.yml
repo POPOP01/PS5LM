@@ -22,6 +22,8 @@ jobs:
             cmake ninja-build meson socat unzip wget rsync pkg-config flex bison \
             python3-mako python3-ply libvulkan-dev spirv-headers \
             zlib1g-dev patchelf
+          pip3 install --break-system-packages -U meson ninja
+          meson --version
           echo "LLVM_CONFIG=llvm-config-18" >> "$GITHUB_ENV"
 
       - name: glslc provider
