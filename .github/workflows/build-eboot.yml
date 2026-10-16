@@ -35,7 +35,7 @@ jobs:
               -DSHADERC_SKIP_TESTS=ON -DSHADERC_SKIP_EXAMPLES=ON \
               -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
             ninja glslc
-            sudo cp glslc /usr/local/bin/glslc
+            sudo cp glslc/glslc /usr/local/bin/glslc
           fi
           glslc --version | head -1
 
