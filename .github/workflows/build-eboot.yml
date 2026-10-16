@@ -20,11 +20,17 @@ jobs:
           sudo apt-get install -y \
             clang-18 lld-18 llvm-18 llvm-18-dev libclang-18-dev libclc-18-dev libllvmspirvlib-18-dev \
             cmake ninja-build meson socat unzip wget rsync pkg-config flex bison \
-            glslang-tools imagemagick \
+            glslang-tools imagemagick librsvg2-bin ffmpeg \
             python3-mako python3-ply libvulkan-dev spirv-headers \
             zlib1g-dev patchelf
           pip3 install --break-system-packages -U meson ninja
           meson --version
+          # noble ships ImageMagick 6 (convert only, no IM7 `magick`), and
+          # build-app.sh calls `magick in.svg out.png`; shim it onto
+          # rsvg-convert, which also renders the SVG's gradients correctly
+          printf '#!/bin/sh\ncase $# in 2) exec rsvg-convert -o "$2" "$1" ;; *) exec convert "$@" ;; esac\n' \
+            | sudo tee /usr/local/bin/magick > /dev/null
+          sudo chmod +x /usr/local/bin/magick
           echo "LLVM_CONFIG=$(command -v llvm-config-18)" >> "$GITHUB_ENV"
 
       - name: glslc provider
