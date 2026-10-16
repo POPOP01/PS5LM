@@ -84,6 +84,10 @@ jobs:
           test -f .deps/native/radv-release/lib/libvulkan_radeon.ps5.a
           test -f runtime/libc.prx
           test -f build/host/ps5-native-tool
+          nm=.deps/native/ps5-payload-sdk/bin/llvm-nm
+          ls -l .deps/native/radv-release/lib/libvulkan_radeon.ps5.a
+          "$nm" --defined-only .deps/native/radv-release/lib/libvulkan_radeon.ps5.a 2>/dev/null | grep -c "T radv_EnumeratePhysicalDevices" || echo "RADV archive lacks radv_EnumeratePhysicalDevices"
+          "$nm" --defined-only .deps/native/radv-release/lib/libvulkan_radeon.ps5.a 2>/dev/null | grep -c " T radv_" || true
 
       - name: Build app
         run: |
@@ -92,7 +96,7 @@ jobs:
           chmod +x scripts/*.sh ps5/app/ps5cc ps5/app/ps5cxx
           scripts/setup-sdk.sh
           scripts/build-mbedtls.sh
-          scripts/build-app.sh || {
+          bash -x scripts/build-app.sh || {
             nm=.deps/src/PS5_Vulkan/.deps/native/ps5-payload-sdk/bin/llvm-nm
             if [ -f build/app-ps5/llvm-pie.elf ]; then
               "$nm" -D build/app-ps5/llvm-pie.elf | grep -i "radv_Enum\|radv_" | head -30 > build/dynsym-radv.txt || true
