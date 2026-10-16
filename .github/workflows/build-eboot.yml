@@ -24,7 +24,7 @@ jobs:
             zlib1g-dev patchelf
           pip3 install --break-system-packages -U meson ninja
           meson --version
-          echo "LLVM_CONFIG=llvm-config-18" >> "$GITHUB_ENV"
+          echo "LLVM_CONFIG=$(command -v llvm-config-18)" >> "$GITHUB_ENV"
 
       - name: glslc provider
         run: |
