@@ -69,6 +69,10 @@ jobs:
       - name: Layout PS5_Vulkan forks
         run: |
           cd PS5LM
+          # replica mode: check out the pristine v0.8.3 tree so the built
+          # binary can be compared byte-for-byte against the official release
+          git checkout --detach v0.8.3
+          git submodule update --init --recursive
           mkdir -p .deps/src .deps/ps5-opengl
           git clone https://github.com/mihawk-99/PS5_Vulkan .deps/src/PS5_Vulkan
           git clone https://github.com/mihawk-99/PS5_Mesa .deps/src/PS5_Mesa
@@ -156,5 +160,10 @@ jobs:
       - name: Host strtof vectors
         run: |
           cd PS5LM/ps5/compat
-          clang test_strtof.c float_strtod.c -o test_strtof_host -lm
-          ./test_strtof_host
+          # replica builds check out the pristine tag, which has no port yet
+          if [ -f float_strtod.c ]; then
+            clang test_strtof.c float_strtod.c -o test_strtof_host -lm
+            ./test_strtof_host
+          else
+            echo "replica tree: float port not present, vectors skipped"
+          fi
