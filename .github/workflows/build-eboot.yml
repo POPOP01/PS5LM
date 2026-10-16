@@ -34,9 +34,15 @@ jobs:
             cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release \
               -DSHADERC_SKIP_TESTS=ON -DSHADERC_SKIP_EXAMPLES=ON \
               -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
-            ninja glslc
-            find build -type f -name glslc || find build -maxdepth 3 | head -40
-            sudo install -m755 "$(find build -type f -name glslc | head -1)" /usr/local/bin/glslc
+            ninja
+            p=$(find . -maxdepth 3 -type f -name glslc | head -1)
+            if [ -n "$p" ]; then
+              sudo install -m755 "$p" /usr/local/bin/glslc
+            else
+              echo "glslc executable not found, tree:"
+              find . -maxdepth 3 | head -50
+              exit 1
+            fi
           fi
           glslc --version | head -1
 
