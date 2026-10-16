@@ -35,7 +35,8 @@ jobs:
               -DSHADERC_SKIP_TESTS=ON -DSHADERC_SKIP_EXAMPLES=ON \
               -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
             ninja glslc
-            sudo cp glslc/glslc /usr/local/bin/glslc
+            find build -type f -name glslc || find build -maxdepth 3 | head -40
+            sudo install -m755 "$(find build -type f -name glslc | head -1)" /usr/local/bin/glslc
           fi
           glslc --version | head -1
 
