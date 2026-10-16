@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            clang-18 lld-18 llvm-18 llvm-18-dev libclang-18-dev libclc-18-dev libllvmspirvlib-18-dev libspirv-dev \
+            clang-18 lld-18 llvm-18 llvm-18-dev libclang-18-dev libclc-18-dev libllvmspirvlib-18-dev \
             cmake ninja-build meson socat unzip wget rsync pkg-config flex bison \
             python3-mako python3-ply libvulkan-dev spirv-headers \
             zlib1g-dev patchelf
@@ -47,6 +47,17 @@ jobs:
             fi
           fi
           glslc --version | head -1
+
+      - name: SPIRV-Tools from source
+        run: |
+          git clone --depth 1 https://github.com/KhronosGroup/SPIRV-Tools "$RUNNER_TEMP/spirv-tools"
+          cd "$RUNNER_TEMP/spirv-tools"
+          python3 utils/git-sync-deps
+          cmake -B build -GNinja -DCMAKE_BUILD_TYPE=Release -DSPIRV_SKIP_TESTS=ON -DSPIRV_SKIP_EXECUTABLES=ON
+          cmake --build build
+          sudo cmake --install build --prefix /usr/local
+          sudo ldconfig
+          pkg-config --modversion SPIRV-Tools
 
       - name: Layout PS5_Vulkan forks
         run: |
