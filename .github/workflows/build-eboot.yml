@@ -141,15 +141,15 @@ jobs:
             PS5LM/build/app-ps5.configure.log
           if-no-files-found: ignore
 
-      - name: Host strtof vectors
-        run: |
-          cd PS5LM/ps5/compat
-          clang test_strtof.c float_strtod.c -o test_strtof_host
-          ./test_strtof_host
-
       - name: Upload title artifact
         uses: actions/upload-artifact@v4
         with:
           name: PPSA99581-title
           path: PS5LM/build/app-ps5/title/PPSA99581/
           if-no-files-found: error
+
+      - name: Host strtof vectors
+        run: |
+          cd PS5LM/ps5/compat
+          clang test_strtof.c float_strtod.c -o test_strtof_host -lm
+          ./test_strtof_host
