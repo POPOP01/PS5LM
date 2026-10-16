@@ -71,6 +71,21 @@ jobs:
           tar xf ps5-opengl-sdk-1.0.0.tar.gz -C .deps/ps5-opengl/
           test -f .deps/ps5-opengl/ps5-opengl-sdk-1.0.0/sdk/lib/libPS5OpenGL.a
 
+      - name: Patch converter to omit providerless weak imports
+        run: |
+          cd PS5LM/.deps/src/PS5_Vulkan
+          python3 - <<'EOF'
+          p = 'tooling/native/sce_module_writer.cpp'
+          s = open(p, encoding='utf-8').read()
+          old = '        require(provider != nullptr, "no public SDK stub exports required symbol " + symbol.name);'
+          new = ('        if (provider == nullptr && symbol.weak() && symbol.undefined())\n'
+                 '            continue;  /* optional entry point: weak import with no provider, SELF omits it */\n'
+                 + old)
+          assert old in s, 'anchor line not found'
+          open(p, 'w', encoding='utf-8', newline='\n').write(s.replace(old, new, 1))
+          print('patched', p)
+          EOF
+
       - name: Build RADV and runtime
         run: |
           cd PS5LM/.deps/src/PS5_Vulkan
