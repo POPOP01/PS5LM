@@ -71,6 +71,8 @@ jobs:
           cd PS5LM
           # replica mode: check out the pristine v0.8.3 tree so the built
           # binary can be compared byte-for-byte against the official release
+          # (actions/checkout is depth-1 on main: fetch the tag explicitly)
+          git fetch --depth 1 origin refs/tags/v0.8.3:refs/tags/v0.8.3
           git checkout --detach v0.8.3
           git submodule update --init --recursive
           mkdir -p .deps/src .deps/ps5-opengl
